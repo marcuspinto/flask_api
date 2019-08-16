@@ -15,14 +15,62 @@ def index(name):
     else:
         return "Not Found", 404
 
+@app.route("/test/")
+@app.route("/test/<name>")
+def test(name=None):
+    if name:
+        return "Olá, %s!" % name
+    else:
+        return "Olá, usuário!"
+
+
 @app.route("/html/<nome>")
 def html_page(nome):
     return render_template("template.html", nome=nome)
-    
-    
-@app.route("/pessoas/")
+
+@app.route("/get/", methods=['GET'])
+def get_api():
+    pessoas = [
+            {"nome": "Method: GET"},
+            {"nome": "Bruno Rocha"},
+            {"nome": "Arjen Lucassen"},
+            {"nome": "Anneke van Giersbergen"},
+            {"nome": "Steven Wilson"}]
+    return json.dumps(pessoas), 200, {"Content-Type": "application/json"}
+
+@app.route("/get/", methods=['POST'])
+def get_post_api():
+    pessoas = [
+            {"nome": "Method: POST GET"},
+            {"nome": "Bruno Rocha"},
+            {"nome": "Arjen Lucassen"},
+            {"nome": "Anneke van Giersbergen"},
+            {"nome": "Steven Wilson"}]
+    return json.dumps(pessoas), 200, {"Content-Type": "application/json"}
+
+@app.route("/post/", methods=['POST'])
+def post_api():
+    pessoas = [
+            {"nome": "Method: POST"},
+            {"nome": "Bruno Rocha"},
+            {"nome": "Arjen Lucassen"},
+            {"nome": "Anneke van Giersbergen"},
+            {"nome": "Steven Wilson"}]
+    return json.dumps(pessoas), 200, {"Content-Type": "application/json"}
+
+@app.route("/pessoas/", methods=['GET', 'POST'])
 def json_api():
-    pessoas = [{"nome": "Bruno Rocha"},
+    if request.method == 'POST':
+        pessoas = [
+               {"nome": "Method: POST"},
+               {"nome": "Bruno Rocha"},
+               {"nome": "Arjen Lucassen"},
+               {"nome": "Anneke van Giersbergen"},
+               {"nome": "Steven Wilson"}]
+    else:
+        pessoas = [
+               {"nome": "Method: GET"},
+               {"nome": "Bruno Rocha"},
                {"nome": "Arjen Lucassen"},
                {"nome": "Anneke van Giersbergen"},
                {"nome": "Steven Wilson"}]
